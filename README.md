@@ -8,7 +8,7 @@ Một ứng dụng Web Blog tin tức cá nhân được xây dựng trên nền
 
 *   **Frontend Framework:** React (với Vite giúp tối ưu tốc độ build và hot-reload)
 *   **Routing:** React Router DOM (Quản lý chuyển trang mượt mà)
-*   **Styling:** CSS Modules / TailwindCSS hoặc Vanilla CSS (tùy thuộc vào cấu hình dự án của bạn)
+*   **Styling:** CSS 
 
 ---
 
@@ -85,6 +85,3 @@ Bash
 npm run build
 
 
-ã clone dự án này từ GitHub, hãy mở Terminal tại thư mục dự án:
-```bash
-cd my-blog
