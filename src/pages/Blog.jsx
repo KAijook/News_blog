@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import ListBlogs from '../components/ListBlogs';
-import SearchBar from '../components/search_bar';
+
 export default function Blog() {
 	const [blogs, setBlogs] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
-	const [searchTerm, setSearchTerm] = useState('');
 const [activeCategory, setActiveCategory] = useState('Everything');
 
 
@@ -58,11 +57,8 @@ const [activeCategory, setActiveCategory] = useState('Everything');
 		  </button>
 		))}
 	  </section>
-<section className="search-section">
-		<SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-	  </section>
 	  <section>
-		<ListBlogs filteredBlogs={filteredBlogs} />
+		<ListBlogs filteredBlogs={filteredBlogs} type="blog" />
 	  </section>
 	</>
   );

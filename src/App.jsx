@@ -1,13 +1,33 @@
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import Blog from './pages/Blog.jsx';
 import About from './pages/About.jsx';
 import Service from './pages/Service.jsx';
 import Contact from './pages/Contact.jsx';
 import BlogSingle from './pages/BlogSingle.jsx';
+import SearchModal from './components/SearchModal.jsx';
 import './App.css';
 
 
 function Layout({ children }) {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [blogs, setBlogs] = useState([]);
+
+  useEffect(() => {
+    fetch('https://dummyjson.com/posts')
+      .then((response) => response.json())
+      .then((data) => setBlogs(data.posts))
+      .catch((err) => console.error('Failed to fetch blogs:', err));
+  }, []);
+
+  const handleSearchOpen = () => {
+    setIsSearchOpen(true);
+  };
+
+  const handleSearchClose = () => {
+    setIsSearchOpen(false);
+  };
+
   return (
     <div className="page-shell">
       <header className="topbar">
@@ -33,7 +53,20 @@ function Layout({ children }) {
             Contact
           </NavLink>
         </nav>
+        <button 
+          type="button" 
+          className="nav-item"
+          onClick={handleSearchOpen}
+        >
+          Search
+        </button>
       </header>
+
+      <SearchModal 
+        isOpen={isSearchOpen} 
+        onClose={handleSearchClose}
+        blogs={blogs}
+      />
 
       <main className="content">{children}</main>
     </div>
