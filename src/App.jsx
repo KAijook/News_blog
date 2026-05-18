@@ -14,7 +14,7 @@ function Layout({ children }) {
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
-    fetch('https://dummyjson.com/posts')
+    fetch('https://dummyjson.com/posts?limit=0')
       .then((response) => response.json())
       .then((data) => setBlogs(data.posts))
       .catch((err) => console.error('Failed to fetch blogs:', err));
@@ -109,7 +109,7 @@ function App() {
         }
       />
       <Route
-        path="/blogs/:id"
+        path="/blogs/:id/:searchTerm?"
         element={
           <Layout>
             <BlogSingle />

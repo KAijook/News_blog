@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import SingleBlog from '../components/Single_Blog';
 export default function BlogSingle() {
-     const { id } = useParams();
+     const { id, searchTerm } = useParams();
     const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -12,7 +12,7 @@ export default function BlogSingle() {
         setLoading(true);
         async function fetchBlog() {
             try {
-                const response = await fetch(`https://dummyjson.com/posts/${id}`);
+                const response = await fetch(`https://dummyjson.com/posts/${id}?q=${searchTerm || ''}`);
                 const data = await response.json();
                 setBlog(data);
             } catch (error) {
@@ -25,7 +25,15 @@ export default function BlogSingle() {
         }
         fetchBlog()
             
-    }, [id]);
+    }, [id, searchTerm]);
+
+    const handleBlogUpdated = (updatedBlog) => {
+        setBlog(updatedBlog);
+    };
+
+    const handleBlogDeleted = (blogId) => {
+        console.log('Blog deleted:', blogId);
+    };
 
     if (loading) {
     return <p>Loading blog...</p>;
@@ -42,7 +50,11 @@ if(error) {
   return (
    
     <section className="blog-single">
-        <SingleBlog blog={blog} />
+        <SingleBlog 
+          blog={blog} 
+          onBlogUpdated={handleBlogUpdated}
+          onBlogDeleted={handleBlogDeleted}
+        />
     </section>
   );
 }

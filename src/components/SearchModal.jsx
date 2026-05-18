@@ -5,23 +5,24 @@ export default function SearchModal({ isOpen, onClose, blogs }) {
   const inputRef = useRef(null);
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
-
+const [filteredBlogs, setFilteredBlogs] = useState([]);
   useEffect(() => {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
     }
   }, [isOpen]);
+useEffect(() => {
+  fetch(`https://dummyjson.com/posts/search?q=${search.toLowerCase()}&limit=0`)
+    .then((response) => response.json())
+    .then((data) => setFilteredBlogs(data.posts))
+    .catch((err) => console.error('Search failed:', err));
+}, [search]);
 
 
-  const searchTerm = search.toLowerCase();
-  const filteredBlogs = searchTerm
-    ? blogs.filter((blog) =>
-        blog.title.toLowerCase().includes(searchTerm)
-      )
-    : [];
+ 
 
   const handleBlogClick = (blogId) => {
-    navigate(`/blogs/${blogId}`);
+    navigate(`/blogs/${blogId}?q=${search}`);
     onClose();
     setSearch('');
   };
@@ -52,13 +53,13 @@ export default function SearchModal({ isOpen, onClose, blogs }) {
           />
 
           <div className="search-modal__results">
-            {searchTerm && filteredBlogs.length > 0 ? (
+            {search && filteredBlogs.length > 0 ? (
              <ListBlogs 
-                filteredBlogs={filteredBlogs} 
+                filteredBlogs={filteredBlogs}
                 type="search" 
                 onItemClick={handleBlogClick} 
               />
-            ) : searchTerm && filteredBlogs.length === 0 ? (
+            ) : search && filteredBlogs.length === 0 ? (
               <p className="search-modal__no-results">No articles found</p>
             ) : (
               <p className="search-modal__hint">Start typing to search...</p>
