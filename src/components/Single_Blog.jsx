@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-
+import { blogAPI } from '../api';
 export default function SingleBlog({ blog, onBlogUpdated, onBlogDeleted }) {
   const navigate = useNavigate();
   const [showEditModal, setShowEditModal] = useState(false);
@@ -20,12 +20,12 @@ const [userId, setUserId] = useState(blog.userId);
     setLoading(true);
     setError('');
 
-    fetch(`https://dummyjson.com/posts/${blog.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: editTitle.trim(), body: body, userId: userId })
+    blogAPI.editPost(blog.id, {
+      title: editTitle.trim(),
+      body: body.trim(),
+      userId: parseInt(userId)
     })
-      .then((res) => res.json())
+      .then((res) => res.data)
       .then((data) => {
         onBlogUpdated(data);
         setShowEditModal(false);
@@ -41,10 +41,7 @@ const [userId, setUserId] = useState(blog.userId);
     setLoading(true);
     setError('');
 
-    fetch(`https://dummyjson.com/posts/${blog.id}`, {
-      method: 'DELETE',
-    })
-      .then((res) => res.json())
+    blogAPI.deletePost(blog.id)
       .then(() => {
         onBlogDeleted(blog.id);
         navigate('/');

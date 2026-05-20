@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import SingleBlog from '../components/Single_Blog';
+import { blogAPI } from '../api';
+
 export default function BlogSingle() {
      const { id, searchTerm } = useParams();
     const [blog, setBlog] = useState(null);
@@ -12,9 +14,8 @@ export default function BlogSingle() {
         setLoading(true);
         async function fetchBlog() {
             try {
-                const response = await fetch(`https://dummyjson.com/posts/${id}?q=${searchTerm || ''}`);
-                const data = await response.json();
-                setBlog(data);
+                const response = await blogAPI.getPostById(id);
+                setBlog(response.data);
             } catch (error) {
                 console.error("Failed to fetch blog:", error);
                 setError(error.message);

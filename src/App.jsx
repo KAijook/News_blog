@@ -1,5 +1,6 @@
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Blog from './pages/Blog.jsx';
 import About from './pages/About.jsx';
 import Service from './pages/Service.jsx';
@@ -8,6 +9,7 @@ import BlogSingle from './pages/BlogSingle.jsx';
 import SearchModal from './components/SearchModal.jsx';
 import './App.css';
 
+const queryClient = new QueryClient();
 
 function Layout({ children }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -75,49 +77,51 @@ function Layout({ children }) {
 
 function App() {
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <Layout>
-            <Blog />
-          </Layout>
-        }
-      />
-      <Route
-        path="/about"
-        element={
-          <Layout>
-            <About />
-          </Layout>
-        }
-      />
-      <Route
-        path="/services"
-        element={
-          <Layout>
-            <Service />
-          </Layout>
-        }
-      />
-      <Route
-        path="/contact"
-        element={
-          <Layout>
-            <Contact />
-          </Layout>
-        }
-      />
-      <Route
-        path="/blogs/:id/:searchTerm?"
-        element={
-          <Layout>
-            <BlogSingle />
-          </Layout>
-        }
-      />
-       <Route path="*" element={<Navigate to="/" replace />} /> 
-    </Routes>
+    <QueryClientProvider client={queryClient}>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Layout>
+              <Blog />
+            </Layout>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <Layout>
+              <About />
+            </Layout>
+          }
+        />
+        <Route
+          path="/services"
+          element={
+            <Layout>
+              <Service />
+            </Layout>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <Layout>
+              <Contact />
+            </Layout>
+          }
+        />
+        <Route
+          path="/blogs/:id/:searchTerm?"
+          element={
+            <Layout>
+              <BlogSingle />
+            </Layout>
+          }
+        />
+         <Route path="*" element={<Navigate to="/" replace />} /> 
+      </Routes>
+    </QueryClientProvider>
   );
 }
 

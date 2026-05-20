@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import { blogAPI } from '../api';
 export default function CreateBlogModal({ isOpen, onClose, onBlogCreated }) {
   const [title, setTitle] = useState('');
   const [userId, setUserId] = useState('');
@@ -20,18 +20,12 @@ export default function CreateBlogModal({ isOpen, onClose, onBlogCreated }) {
     setLoading(true);
     setError('');
     setSuccess('');
-
-    fetch('https://dummyjson.com/posts/add', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title: title.trim(),
-        userId: parseInt(userId),
-        tags: tags.split(',').map((tag) => tag.trim()),
-        body: body.trim()
-      })
+    blogAPI.createPost({
+      title: title.trim(),
+      body: body.trim(),
+      userId: parseInt(userId),
+      tags: tags.split(',').map((tag) => tag.trim())
     })
-      .then((res) => res.json())
       .then((data) => {
         setSuccess('Blog created successfully!');
         onBlogCreated(data);
@@ -42,7 +36,7 @@ export default function CreateBlogModal({ isOpen, onClose, onBlogCreated }) {
           setBody('');
           setSuccess('');
           onClose();
-        }, 2000);
+        }, 1500);
       })
       .catch((err) => {
         console.error('Failed to create blog:', err);
