@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-export default function ListBlogs({  filteredBlogs, type, onItemClick }) {
+export default function BlogList({  filteredBlogs, type, onItemClick }) {
 	const navigate = useNavigate();
     return(
 

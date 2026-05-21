@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { blogAPI } from '../api';
-export default function CreateBlogModal({ isOpen, onClose, onBlogCreated }) {
+export default function BlogCreateModal({ isOpen, onClose, onBlogCreated }) {
   const [title, setTitle] = useState('');
   const [userId, setUserId] = useState('');
   const [tags, setTags] = useState('');

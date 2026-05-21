@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { blogAPI } from '../api';
-export default function SingleBlog({ blog, onBlogUpdated, onBlogDeleted }) {
+export default function BlogDescription({ blog, onBlogUpdated, onBlogDeleted }) {
   const navigate = useNavigate();
   const [showEditModal, setShowEditModal] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);

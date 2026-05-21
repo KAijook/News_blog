@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import ListBlogs from '../components/ListBlogs';
+import BlogList from '../components/BlogList';
 import Pagination from '../components/Pagination';
-import CreateBlogModal from '../components/CreateBlogModal';
+import BlogCreateModal from '../components/BlogCreateModal';
 import { blogAPI } from '../api';
 
 export default function Blog() {
@@ -119,7 +119,7 @@ export default function Blog() {
 			<p>Loading blogs...</p>
 		) : (
 			<>
-				<ListBlogs filteredBlogs={displayedBlogs} type="blog" />
+				<BlogList filteredBlogs={displayedBlogs} type="blog" />
 				<Pagination
 					currentPage={currentPage}
 					totalPages={totalPages}
@@ -129,7 +129,7 @@ export default function Blog() {
 		)}
 	  </section>
 
-	  <CreateBlogModal 
+	  <BlogCreateModal 
 		isOpen={showCreateModal}
 		onClose={() => setShowCreateModal(false)}
 		onBlogCreated={handleBlogCreated}

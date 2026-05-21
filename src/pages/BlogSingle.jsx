@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import SingleBlog from '../components/Single_Blog';
+import BlogDescription from '../components/BlogDescription';
 import { blogAPI } from '../api';
 
 export default function BlogSingle() {
@@ -51,7 +51,7 @@ if(error) {
   return (
    
     <section className="blog-single">
-        <SingleBlog 
+        <BlogDescription
           blog={blog} 
           onBlogUpdated={handleBlogUpdated}
           onBlogDeleted={handleBlogDeleted}

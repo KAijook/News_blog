@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ListBlogs from './ListBlogs';
+import ListBlogs from './BlogList';
 export default function SearchModal({ isOpen, onClose, blogs }) {
   const inputRef = useRef(null);
   const navigate = useNavigate();
