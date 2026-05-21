@@ -102,42 +102,9 @@
   padding: 64px 0 40px;
 }
 
-.hero {
-  max-width: 760px;
-  margin-bottom: 28px;
-}
 
-.hero-label {
-  margin: 0 0 12px;
-  font-size: 0.95rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #4c51bf;
-}
 
-.hero-title {
-  margin: 0;
-  color: #0f172a;
-  font-size: clamp(2.4rem, 5vw, 5rem);
-  line-height: 0.96;
-  letter-spacing: -0.05em;
-}
 
-.hero-copy {
-  margin-top: 18px;
-  max-width: 620px;
-  color: #475569;
-  font-size: 1.05rem;
-  line-height: 1.75;
-}
-
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin: 28px 0 30px;
-}
 
 .tag-btn {
   padding: 0.8rem 1.15rem;
@@ -149,11 +116,7 @@
   box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
 }
 
-.tag-btn.is-active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #fff;
-  box-shadow: 0 14px 26px rgba(102, 126, 234, 0.28);
-}
+
 
 .blog-list {
   list-style: none;
@@ -675,33 +638,8 @@ gap: 20px;
   gap: 12px;
 }
 
-.tag-btn-modal {
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid rgba(102, 126, 234, 0.2);
-  background: rgba(102, 126, 234, 0.08);
-  color: #4c51bf;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
-}
 
-.tag-btn-modal:hover {
-  background: rgba(102, 126, 234, 0.2);
-  border-color: rgba(102, 126, 234, 0.4);
-}
 
-/* Filters Section */
-.filters-section {
-  margin: 28px 0 30px;
-}
-
-.filters-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
 
 .filters {
   display: flex;
@@ -717,26 +655,8 @@ gap: 20px;
   align-items: center;
 }
 
-.tag-btn--show-more {
-  background: rgba(102, 126, 234, 0.12);
-  color: #4c51bf;
-  border: 1px solid rgba(102, 126, 234, 0.2);
-}
 
-.tag-btn--show-more:hover {
-  background: rgba(102, 126, 234, 0.2);
-}
 
-.tag-btn--primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #fff;
-  border: none;
-}
-
-.tag-btn--primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 22px rgba(102, 126, 234, 0.3);
-}
 
 .sort-select {
   padding: 0.8rem 1rem;
@@ -747,13 +667,6 @@ gap: 20px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-}
-
-.sort-select:hover,
-.sort-select:focus {
-  border-color: rgba(102, 126, 234, 0.4);
-  outline: none;
-  background: #fff;
 }
 
 /* Single Blog Styles */
@@ -875,6 +788,9 @@ gap: 20px;
   gap: 8px;
   margin: 40px 0;
   flex-wrap: wrap;
+}
+.pagination--hidden {
+  display: none;
 }
 
 .pagination-btn {

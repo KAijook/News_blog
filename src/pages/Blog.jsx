@@ -4,6 +4,8 @@ import BlogList from '../components/BlogList';
 import Pagination from '../components/Pagination';
 import BlogCreateModal from '../components/BlogCreateModal';
 import { blogAPI } from '../api';
+import { useForm } from 'react-hook-form';
+import Skeleton from "@mui/material/Skeleton";
 
 export default function Blog() {
 	const [activeCategory, setActiveCategory] = useState('Everything');
@@ -11,7 +13,7 @@ export default function Blog() {
 	const [sortOrder, setSortOrder] = useState('default');
 	const [showAllTags, setShowAllTags] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
-	const PAGE_SIZE = 10;
+	const PAGE_SIZE = 12;
 
 	const { data: tagsData } = useQuery({
 		queryKey: ['tags'],
@@ -34,15 +36,26 @@ export default function Blog() {
 
 	const filteredBlogs = postsData?.posts || [];
 	const totalPosts = postsData?.total || 0;
+	
 	const totalPages = Math.ceil(totalPosts / PAGE_SIZE);
 
-	const displayedBlogs = useMemo(() => {
-		let blogs = [...filteredBlogs];
-		if (sortOrder === 'a-z') {
-			blogs.sort((a, b) => a.title.localeCompare(b.title));
-		}
-		return blogs;
-	}, [filteredBlogs, sortOrder]);
+const { data: displayedBlogs = [],isLoading: isDisplayedBlogsLoading} = useQuery({
+  
+  queryKey: ['displayedBlogs', sortOrder, filteredBlogs?.length], 
+  queryFn: async () => {
+    let blogs = [...filteredBlogs];
+
+    if (sortOrder === 'a-z') {
+      const response = await blogAPI.sortPosts();
+   
+      return response.data.posts; 
+    }
+
+    return blogs; 
+  },
+
+  enabled: filteredBlogs?.length > 0 
+});
 
 	const handleBlogCreated = (newBlog) => {
 		setCurrentPage(1);
@@ -60,22 +73,25 @@ export default function Blog() {
 
   return (
 	<>
-	  <section className="hero">
-		<p className="hero-label">We write about</p>
-		<h2 className="hero-title">Ideas, tutorials, and practical notes for everyday work.</h2>
-		<p className="hero-copy">
+	  <section className="max-w-[760px] mb-7">
+		<p className="mx-0 mt-0 mb-3 text-[1.2rem] font-[800] tracking-[0.12em] uppercase text-[#4c51bf]">We write about</p>
+		<h2 className="m-0 text-[#0f172a] text-[clamp(2.4rem,5vw,5rem)] tracking-[-0.05em] leading-[0.96]">
+  Ideas, tutorials, and practical notes for everyday work.
+</h2>
+		<p className="mt-[18px] max-w-[620px] text-[#475569] text-[1.05rem] leading-[1.75] ">
 		  A News Blog provide valuable content that helps our readers grow and succeed in their endeavors.
 		</p>
 	  </section>
 
-	  <section className="filters-section">
-		<div className="filters-wrapper">
-			<div className="filters">
+	  <section className="mt-7 mb-[30px] mx-0">
+		<div className="flex flex-col gap-[16px]">
+			<div className="flex flex-wrap gap-[12px] mb-[30px] mt-[28px] mx-0">
 				{displayCategories.map((category, idx) => (
 					<button
 						key={`${category}`}
 						type="button"
-						className={`tag-btn${activeCategory === category ? ' is-active' : ''}`}
+						className={`py-[0.8rem] px-[1.2rem] rounded-full cursor-pointer  border-[rgba(102,126,234,0.16)] border font-[700] ]
+							${activeCategory === category ? 'bg-[linear-gradient(135deg,#667eea_0%,#764ba2_100%)] text-[#fff] shadow-[0_14px_26px_rgba(102,126,234,0.28)]' : 'bg-[rgba(255,255,255,0.8)] color-[#1f2937] shadow-[0_10px_24px_rgba(15,23,42,0.06)'}`}
 						onClick={() => {
 							setActiveCategory(category);
 							setCurrentPage(1);
@@ -87,46 +103,55 @@ export default function Blog() {
 				{tags.length > 8 && (
 					<button
 						type="button"
-						className="tag-btn tag-btn--show-more"
+						className="py-[0.8rem] px-[1.15rem] rounded-full bg-[rgba(102,126,234,0.12)] color-[#4c51bf] shadow-[0_10px_24px_rgba(15,23,42,0.06)] border cursor-pointer border-[rgba(102,126,234,0.16)] font-[700] hover:bg-[rgba(102,126,234,0.2)]"
 						onClick={() => setShowAllTags(!showAllTags)}
 					>
 						{showAllTags ? '- Collapse' : `+ More (${tags.length - 8})`}
 					</button>
 				)}
 			</div>
-			<div className="filters-actions">
+			<div className="flex flex-wrap gap-[12px] align-center">
 				<button
 					type="button"
-					className="tag-btn tag-btn--primary"
+					className="py-[0.8rem] px-[1.15rem] rounded-full border-none bg-[linear-gradient(135deg,#667eea_0%,#764ba2_100%)] text-[#fff] shadow-[0_10px_24px_rgba(15,23,42,0.06)] border cursor-pointer border-[rgba(102,126,234,0.16)] font-[700] hover:bg-[rgba(102,126,234,0.2)] hover:translate-y-[-2px] hover:shadow-[0_10px_22px_rgba(102,126,234,0.3)]"
 					onClick={() => setShowCreateModal(true)}
 				>
 					+ New Blog
 				</button>
-				<select 
-					className="sort-select"
-					value={sortOrder}
-					onChange={(e) => setSortOrder(e.target.value)}
-				>
-					<option value="default">Default</option>
-					<option value="a-z">A-Z</option>
-				</select>
+<div className="relative flex items-center w-fit">
+  
+  <select 
+    className=" py-[0.8rem] pl-[1.15rem] pr-[2.5rem] rounded-full border-none bg-[rgba(102,126,234,0.12)] text-[#4c51bf] shadow-[0_10px_24px_rgba(15,23,42,0.06)] border cursor-pointer border-[rgba(102,126,234,0.16)] font-[700] hover:bg-[rgba(102,126,234,0.2)] appearance-none hover:border-color-[rgba(102,126,234,0.4)] hover:outline-none "
+    value={sortOrder}
+    onChange={(e) => setSortOrder(e.target.value)}
+  >
+    <option value="default">Default</option>
+    <option value="a-z">A-Z</option>
+  </select>
+
+  <small className="absolute right-4 pointer-events-none text-[#4c51bf] text-2.5">
+    ⏷
+  </small>
+
+</div>
 			</div>
 		</div>
 	  </section>
 
 	  <section>
-		{isLoading ? (
-			<p>Loading blogs...</p>
-		) : (
+		
 			<>
-				<BlogList filteredBlogs={displayedBlogs} type="blog" />
+				<BlogList filteredBlogs={displayedBlogs} 
+				type="blog" 
+				isLoading={isLoading || isDisplayedBlogsLoading}
+				/>
 				<Pagination
 					currentPage={currentPage}
 					totalPages={totalPages}
 					onPageChange={setCurrentPage}
 				/>
 			</>
-		)}
+		
 	  </section>
 
 	  <BlogCreateModal 

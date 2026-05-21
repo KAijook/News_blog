@@ -19,9 +19,12 @@ export const blogAPI = {
 	getTagList: () =>
 		api.get('/posts/tag-list'),
 
+	sortPosts: () =>
+		api.get('https://dummyjson.com/posts?sortBy=title&order=asc'),
+
 	createPost: (postData) =>
 		api.post('/posts/add', postData),
-	editPost: (postId, postData) =>
+	updatePost: (postId, postData) =>
 		api.put(`/posts/${postId}`, postData),
 	deletePost: (postId) =>
 		api.delete(`/posts/${postId}`),

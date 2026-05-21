@@ -35,7 +35,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
 	const pages = getPageNumbers();
 
 	return (
-		<div className="pagination">
+		<div className={`pagination ${pages.length === 1 ? 'pagination--hidden' : ''}`}>
 			<button
 				className="pagination-btn pagination-prev"
 				onClick={() => onPageChange(currentPage - 1)}

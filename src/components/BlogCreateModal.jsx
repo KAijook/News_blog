@@ -1,48 +1,73 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { blogAPI } from '../api';
+import { useMutation } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'react-hot-toast'; 
+import z from 'zod';
+
+
+const postSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  userId: z
+    .string()
+    .min(1, 'User ID is required')
+    .refine((val) => !isNaN(Number(val)), { message: 'User ID must be a number' }),
+  tags: z.string().min(1, 'Tags are required'),
+  body: z.string().min(1, 'Body is required'),
+});
+
+
 export default function BlogCreateModal({ isOpen, onClose, onBlogCreated }) {
-  const [title, setTitle] = useState('');
-  const [userId, setUserId] = useState('');
-  const [tags, setTags] = useState('');
-  const [body, setBody] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(postSchema),
+    defaultValues: {
+      title: '',
+      userId: '',
+      tags: '',
+      body: '',
+    },
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    if (!title.trim() || !userId.trim()) {
-      setError('Please fill all fields');
-      return;
+  
+  const { mutate: createBlog, isPending } = useMutation({
+    mutationFn: (blogData) => blogAPI.createPost(blogData),
+    onSuccess: (data) => {
+      toast.success('Blog created successfully!');
+      onBlogCreated(data);
+      setTimeout(() => {
+        onClose();
+      }, 1500);
+    },
+    onError: (err) => {
+      console.error('Failed to create blog:', err);
+      toast.error('Failed to create blog');
+    },
+  });
+
+  useEffect(() => {
+    if (isOpen) {
+      reset(); 
     }
+  }, [isOpen, reset]);
 
-    setLoading(true);
-    setError('');
-    setSuccess('');
-    blogAPI.createPost({
-      title: title.trim(),
-      body: body.trim(),
-      userId: parseInt(userId),
-      tags: tags.split(',').map((tag) => tag.trim())
-    })
-      .then((data) => {
-        setSuccess('Blog created successfully!');
-        onBlogCreated(data);
-        setTimeout(() => {
-          setTitle('');
-          setUserId('');
-          setTags('');
-          setBody('');
-          setSuccess('');
-          onClose();
-        }, 1500);
-      })
-      .catch((err) => {
-        console.error('Failed to create blog:', err);
-        setError('Failed to create blog');
-      })
-      .finally(() => setLoading(false));
+  const onSubmit = (formData) => {
+  
+    const payload = {
+      title: formData.title.trim(),
+      body: formData.body.trim(),
+      userId: parseInt(formData.userId, 10),
+      tags: formData.tags.split(',').map((tag) => tag.trim()).filter(Boolean)
+        
+    };
+
+    createBlog(payload);
   };
 
   if (!isOpen) return null;
@@ -54,61 +79,65 @@ export default function BlogCreateModal({ isOpen, onClose, onBlogCreated }) {
           <h2>Create New Blog</h2>
           <button className="modal-close" onClick={onClose}>✕</button>
         </div>
-        
-        <form onSubmit={handleSubmit} className="modal-body">
-          {error && <p className="error">{error}</p>}
-          {success && <p className="success">{success}</p>}
+
+     
+        <form onSubmit={handleSubmit(onSubmit)} className="modal-body">
           
+      
           <div className="form-group">
             <label htmlFor="title">Blog Title</label>
             <input
               id="title"
               type="text"
               placeholder="Enter blog title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              disabled={loading}
+              disabled={isPending}
+              {...register('title')} 
             />
+            {errors.title && <p className="error">{errors.title.message}</p>}
           </div>
 
+          
           <div className="form-group">
             <label htmlFor="userId">User ID</label>
             <input
               id="userId"
-              type="number"
+              type="text" 
               placeholder="Enter user ID"
-              value={userId}
-              onChange={(e) => setUserId(e.target.value)}
-              disabled={loading}
+              disabled={isPending}
+              {...register('userId')}
             />
+            {errors.userId && <p className="error">{errors.userId.message}</p>}
           </div>
 
+          
           <div className="form-group">
             <label htmlFor="tags">Tags (comma separated)</label>
             <input
               id="tags"
               type="text"
               placeholder="e.g. tech, programming"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              disabled={loading}
+              disabled={isPending}
+              {...register('tags')}
             />
+            {errors.tags && <p className="error">{errors.tags.message}</p>}
           </div>
-          <div className="form-group">  
+
+          <div className="form-group">
             <label htmlFor="body">Blog Body</label>
             <textarea
               id="body"
               placeholder="Enter blog content"
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-              disabled={loading}
+              disabled={isPending}
+              {...register('body')}
             />
+            {errors.body && <p className="error">{errors.body.message}</p>}
           </div>
+
           <div className="form-actions">
-            <button type="submit" disabled={loading} className="btn-primary">
-              {loading ? 'Creating...' : 'Create Blog'}
+            <button type="submit" disabled={isPending} className="btn-primary">
+              {isPending ? 'Creating...' : 'Create Blog'}
             </button>
-            <button type="button" onClick={onClose} disabled={loading} className="btn-secondary">
+            <button type="button" onClick={onClose} disabled={isPending} className="btn-secondary">
               Cancel
             </button>
           </div>
