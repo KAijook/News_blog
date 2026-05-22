@@ -1,9 +1,7 @@
 .page-shell {
   min-height: 100vh;
   padding: 24px;
-  background:
-    
-    linear-gradient(180deg, #fcfdff 0%, #f4f7fb 100%);
+  background: linear-gradient(180deg, #fcfdff 0%, #f4f7fb 100%);
 }
 
 .topbar,
@@ -73,7 +71,10 @@
   border: 0;
   cursor: pointer;
   text-decoration: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
 .nav-item {
@@ -102,10 +103,6 @@
   padding: 64px 0 40px;
 }
 
-
-
-
-
 .tag-btn {
   padding: 0.8rem 1.15rem;
   border-radius: 999px;
@@ -116,8 +113,6 @@
   box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
 }
 
-
-
 .blog-list {
   list-style: none;
   padding: 0;
@@ -127,72 +122,9 @@
   gap: 18px;
 }
 .blog-list--search-results {
-display: flex;
-flex-direction: column;
-gap: 20px;
-
-}
-
-.blog-item {
-  display: block;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 24px;
-  padding: 22px;
-  min-height: 220px;
-  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.blog-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 22px 42px rgba(15, 23, 42, 0.12);
-}
-
-.blog-item__tag {
-  display: inline-flex;
-  min-width: 74px;
- justify-content: center;
-  box-sizing: border-box;
-  padding: 0.3rem 0.5rem;
-  border-radius: 999px;
-  background: rgba(102, 126, 234, 0.12);
-  color: #4c51bf;
-  margin: 0 6px 6px 0;
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.blog-item__title {
-  margin: 14px 0 10px;
-  color: #111827;
-  font-size: 1.25rem;
-  line-height: 1.3;
-}
-
-.blog-item__excerpt {
-  margin: 0;
-  color: #4b5563;
-  line-height: 1.7;
-}
-
-.blog-item__meta {
-  margin: 18px 0 0;
-  color: #6b7280;
-  font-size: 0.92rem;
-}
-.blog-item__read-more {
-  margin-top: 12px;
-  padding: 0.6rem 1rem;
-  border: none;
-  border-radius: 6px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .about-page,
@@ -516,10 +448,10 @@ gap: 20px;
   color: #111827;
   font-size: 0.95rem;
 }
-.form-group #body{
+.form-group #body {
   height: 200px;
 }
-.form-group #edit-body{
+.form-group #edit-body {
   height: 200px;
 }
 .form-group input,
@@ -530,7 +462,9 @@ gap: 20px;
   border-radius: 8px;
   font-family: inherit;
   font-size: 1rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   box-sizing: border-box;
 }
 
@@ -638,9 +572,6 @@ gap: 20px;
   gap: 12px;
 }
 
-
-
-
 .filters {
   display: flex;
   flex-wrap: wrap;
@@ -654,9 +585,6 @@ gap: 20px;
   gap: 12px;
   align-items: center;
 }
-
-
-
 
 .sort-select {
   padding: 0.8rem 1rem;

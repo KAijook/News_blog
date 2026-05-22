@@ -1,13 +1,13 @@
-import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import Blog from './pages/Blog.jsx';
-import About from './pages/About.jsx';
-import Service from './pages/Service.jsx';
-import Contact from './pages/Contact.jsx';
-import BlogSingle from './pages/BlogSingle.jsx';
-import SearchModal from './components/SearchModal.jsx';
-import './App.css';
+import { NavLink, Navigate, Route, Routes } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Blog from "./pages/Blog.jsx";
+import About from "./pages/About.jsx";
+import Service from "./pages/Service.jsx";
+import Contact from "./pages/Contact.jsx";
+import BlogSingle from "./pages/BlogSingle.jsx";
+import SearchModal from "./components/SearchModal.jsx";
+import "./App.css";
 
 const queryClient = new QueryClient();
 
@@ -16,10 +16,10 @@ function Layout({ children }) {
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
-    fetch('https://dummyjson.com/posts?limit=0')
+    fetch("https://dummyjson.com/posts?limit=0")
       .then((response) => response.json())
       .then((data) => setBlogs(data.posts))
-      .catch((err) => console.error('Failed to fetch blogs:', err));
+      .catch((err) => console.error("Failed to fetch blogs:", err));
   }, []);
 
   const handleSearchOpen = () => {
@@ -42,30 +42,47 @@ function Layout({ children }) {
         </div>
 
         <nav className="nav-bar">
-          <NavLink to="/" end className={({ isActive }) => `nav-item${isActive ? ' is-active' : ''}`}>
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              `nav-item${isActive ? " is-active" : ""}`
+            }
+          >
             Home
           </NavLink>
-          <NavLink to="/about" className={({ isActive }) => `nav-item${isActive ? ' is-active' : ''}`}>
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `nav-item${isActive ? " is-active" : ""}`
+            }
+          >
             About
           </NavLink>
-          <NavLink to="/services" className={({ isActive }) => `nav-item${isActive ? ' is-active' : ''}`}>
+          <NavLink
+            to="/services"
+            className={({ isActive }) =>
+              `nav-item${isActive ? " is-active" : ""}`
+            }
+          >
             Services
           </NavLink>
-          <NavLink to="/contact" className={({ isActive }) => `nav-item${isActive ? ' is-active' : ''}`}>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              `nav-item${isActive ? " is-active" : ""}`
+            }
+          >
             Contact
           </NavLink>
         </nav>
-        <button 
-          type="button" 
-          className="nav-item"
-          onClick={handleSearchOpen}
-        >
+        <button type="button" className="nav-item" onClick={handleSearchOpen}>
           Search
         </button>
       </header>
 
-      <SearchModal 
-        isOpen={isSearchOpen} 
+      <SearchModal
+        isOpen={isSearchOpen}
         onClose={handleSearchClose}
         blogs={blogs}
       />
@@ -119,7 +136,7 @@ function App() {
             </Layout>
           }
         />
-         <Route path="*" element={<Navigate to="/" replace />} /> 
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </QueryClientProvider>
   );
