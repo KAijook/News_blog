@@ -117,9 +117,12 @@ export default function Blog() {
     return searchPostsData.filter((post) => post.tags.includes(activeCategory));
   }, [searchPostsData, displayedBlogs, activeCategory]);
 
+
+
   if (error) {
     return <p>Failed to load blogs: {error.message}</p>;
   }
+ 
 
   return (
     <>
@@ -180,7 +183,7 @@ export default function Blog() {
                   setCurrentPage(1);
                 }}
               >
-                <SelectTrigger className=" py-[0.6rem] pl-[1rem] pr-[2.5rem] rounded-full bg-[rgba(102,126,234,0.12)] text-[#4c51bf] shadow-[0_10px_24px_rgba(15,23,42,0.06)] font-[700]">
+                <SelectTrigger className="h-full py-[0.6rem] pl-[1rem] pr-[2.5rem] rounded-full bg-[rgba(102,126,234,0.12)] text-[#4c51bf] shadow-[0_10px_24px_rgba(15,23,42,0.06)] font-[700]">
                   <SelectValue placeholder="Theme" />
                 </SelectTrigger>
                 <SelectContent>
@@ -220,11 +223,18 @@ export default function Blog() {
 
       <section>
         <>
+{postToShow.length === 0 ? (
+  <p className="text-center text-gray-500 text-[1.1rem] mt-[40px]">
+    No blogs found for the selected category.
+  </p>
+) : (
           <BlogList
             filteredBlogs={postToShow}
             type="blog"
             isLoading={isLoadingToShow}
           />
+        )}
+          
           {!isSearchingMode && (
             <Pagination
               currentPage={currentPage}
