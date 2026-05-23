@@ -22,7 +22,7 @@ export default function Blog() {
   const [showAllTags, setShowAllTags] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+ 
   const PAGE_SIZE = 12;
   // Fetch tags for category filtering
   const { data: tagsData } = useQuery({
@@ -106,7 +106,7 @@ export default function Blog() {
 
   const postToShow = useMemo(() => {
     // If not in search mode, show the paginated and sorted blogs by Tags
-    if (!searchPostsData) return displayedBlogs;
+    if (!searchQuery) return displayedBlogs;
 
     // 1. If no tag selected -> return all search results
     if (activeCategory === "Everything") {
@@ -115,7 +115,7 @@ export default function Blog() {
     // 2. if tag selected -> return search results filtered by tag
 
     return searchPostsData.filter((post) => post.tags.includes(activeCategory));
-  }, [searchPostsData, displayedBlogs, activeCategory]);
+  }, [searchPostsData, searchQuery, displayedBlogs, activeCategory]);
 
 
 

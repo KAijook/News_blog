@@ -23,7 +23,7 @@ export default function BlogDescription({ blog }) {
     body: z.string().min(1, "Body is required"),
     userId: z.string().min(1, "User ID is required"),
   });
-  
+
   const { register, handleSubmit } = useForm({
     resolver: zodResolver(updateSchema),
     defaultValues: {
@@ -41,6 +41,7 @@ export default function BlogDescription({ blog }) {
       setShowEditModal(false);
       queryClient.invalidateQueries({ queryKey: ["blog", blog.id] });
       toast.success("Blog updated successfully");
+     
     },
     onError: (err) => {
       console.error("Failed to update blog:", err);
@@ -154,17 +155,18 @@ export default function BlogDescription({ blog }) {
 
       {deleteConfirm && (
         <Dialog open={deleteConfirm} onOpenChange={setDeleteConfirm}>
-          <DialogContent>
+          <DialogContent className="max-w-[400px] p-[24px] max-h-[300px]">
             <DialogHeader>
-              <DialogTitle>Delete Blog</DialogTitle>
+              <DialogTitle className="mb-[2px]">Delete Blog</DialogTitle>
             </DialogHeader>
              
-            <div className="p-[24px]">
-              <p className="text-[#475569] leading-[1.75]">
-                Are you sure you want to delete this blog post? This action
-                cannot be undone.
+            <div className="p-[24px] flex flex-col items-start">
+              <p className="text-[#475569] leading-[1.75] text-center mb-[25px] text-[0.9rem] font-bold">
+                Are you sure you want to delete this blog post? 
+                <p>This action
+                cannot be undone.</p>
               </p>
-              <div className="flex gap-[12px] flex-wrap justify-end md:justify-start w-full md:w-auto mt-[24px]">
+              <div className="flex gap-[12px] flex-wrap justify-end md:justify-start w-full md:w-auto mt-[18px]">
                 <button
                   className="border-none rounded-[8px] p-[10px_16px] font-semibold cursor-pointer transition-all duration-200 text-[0.95rem] bg-[#ef4444] text-white hover:not:disabled:bg-[#dc2626] hover:not:disabled:-translate-y-[2px] hover:not:disabled:shadow-[0_10px_22px_rgba(239,68,68,0.3)] disabled:opacity-60 disabled:cursor-not-allowed"
                   onClick={() => deleteBlog()}

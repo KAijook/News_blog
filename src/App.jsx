@@ -1,5 +1,4 @@
 import { NavLink, Navigate, Route, Routes } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Blog from "./pages/Blog.jsx";
 import About from "./pages/About.jsx";
@@ -23,7 +22,7 @@ function Layout({ children }) {
           </div>
         </div>
 
-        <nav className="nav-bar">
+        <nav className="nav-bar z-50">
           <NavLink
             to="/"
             end

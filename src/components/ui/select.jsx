@@ -53,7 +53,7 @@ function SelectContent({
         data-align-trigger={position === "item-aligned"}
         sideOffset={5}
         className={cn(
-          "relative z-50 min-w-36 overflow-x-hidden overflow-y-auto",
+          "relative min-w-36 overflow-x-hidden overflow-y-auto",
           "max-h-(--radix-select-content-available-height) origin-(--radix-select-content-transform-origin)",
 
           "bg-popover text-popover-foreground rounded-3xl shadow-lg",
