@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import BlogList from "../components/BlogList";
 import Pagination from "../components/Pagination";
 import BlogCreateModal from "../components/BlogCreateModal";
 import { blogAPI } from "../api";
+import { Input } from "../components/ui/input";
 import {
   Select,
   SelectContent,
@@ -12,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useDebounce } from "../hooks/useDebounce";
 
 export default function Blog() {
   const [activeCategory, setActiveCategory] = useState("Everything");
@@ -19,17 +21,33 @@ export default function Blog() {
   const [sortOrder, setSortOrder] = useState("default");
   const [showAllTags, setShowAllTags] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const PAGE_SIZE = 12;
-
+  // Fetch tags for category filtering
   const { data: tagsData } = useQuery({
     queryKey: ["tags"],
     queryFn: () =>
       blogAPI.getTagList().then((res) => ["Everything", ...res.data]),
   });
 
+  const debouncedSearchQuery = useDebounce(searchQuery, 1000);
+  // Fetch posts for search suggestions
+  const { data: searchPostsData, isLoading: isSearching } = useQuery({
+    queryKey: ["searchPosts", debouncedSearchQuery],
+    queryFn: () =>
+      blogAPI.searchPosts(debouncedSearchQuery).then((res) => res.data.posts),
+    enabled: debouncedSearchQuery.trim().length > 0,
+  });
+
+  const isSearchingMode = debouncedSearchQuery.trim().length > 0;
+
   const tags = tagsData || [];
   const displayCategories = showAllTags ? tags : tags.slice(0, 8);
 
+ 
+
+  // Fetch posts based on active category and pagination
   const {
     data: postsData,
     isLoading,
@@ -47,6 +65,7 @@ export default function Blog() {
     },
   });
 
+ 
   const items = [
     { value: "default", label: "Default" },
     { value: "a-z", label: "A-Z" },
@@ -57,6 +76,7 @@ export default function Blog() {
 
   const totalPages = Math.ceil(totalPosts / PAGE_SIZE);
 
+  // Fetch sorted posts if sort order is changed
   const { data: displayedBlogs = [], isLoading: isDisplayedBlogsLoading } =
     useQuery({
       queryKey: ["displayedBlogs", sortOrder, filteredBlogs?.length],
@@ -80,12 +100,33 @@ export default function Blog() {
     setShowCreateModal(false);
   };
 
+  const isLoadingToShow = isSearchingMode
+    ? isSearching
+    : isLoading || isDisplayedBlogsLoading;
+
+  const postToShow = useMemo(() => {
+    // If not in search mode, show the paginated and sorted blogs by Tags
+    if (!searchPostsData) return displayedBlogs;
+
+    // 1. If no tag selected -> return all search results
+    if (activeCategory === "Everything") {
+      return searchPostsData;
+    }
+    // 2. if tag selected -> return search results filtered by tag
+
+    return searchPostsData.filter((post) => post.tags.includes(activeCategory));
+  }, [searchPostsData, displayedBlogs, activeCategory]);
+
+
+
   if (error) {
     return <p>Failed to load blogs: {error.message}</p>;
   }
+ 
 
   return (
     <>
+      
       <section className="max-w-[760px] mb-7">
         <p className="mx-0 mt-0 mb-3 text-[1.2rem] font-[800] tracking-[0.12em] uppercase text-[#4c51bf]">
           We write about
@@ -142,7 +183,7 @@ export default function Blog() {
                   setCurrentPage(1);
                 }}
               >
-                <SelectTrigger className=" py-[0.6rem] pl-[1rem] pr-[2.5rem] rounded-full bg-[rgba(102,126,234,0.12)] text-[#4c51bf] shadow-[0_10px_24px_rgba(15,23,42,0.06)] font-[700]">
+                <SelectTrigger className="h-full py-[0.6rem] pl-[1rem] pr-[2.5rem] rounded-full bg-[rgba(102,126,234,0.12)] text-[#4c51bf] shadow-[0_10px_24px_rgba(15,23,42,0.06)] font-[700]">
                   <SelectValue placeholder="Theme" />
                 </SelectTrigger>
                 <SelectContent>
@@ -160,22 +201,47 @@ export default function Blog() {
                 </SelectContent>
               </Select>
             </div>
+            <div className="flex items-center gap-[12px] ml-auto">
+               
+                      <Input
+                        type="text"
+                        placeholder="Search blogs..."
+                        value={searchQuery}
+                        className="w-[400px] h-full px-[16px] rounded-full"
+                        onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+                        }}
+                      />
+                    
+              
+            </div>
+            </div>
           </div>
-        </div>
+      
       </section>
 
       <section>
         <>
+{postToShow.length === 0 ? (
+  <p className="text-center text-gray-500 text-[1.1rem] mt-[40px]">
+    No blogs found for the selected category.
+  </p>
+) : (
           <BlogList
-            filteredBlogs={displayedBlogs}
+            filteredBlogs={postToShow}
             type="blog"
-            isLoading={isLoading || isDisplayedBlogsLoading}
+            isLoading={isLoadingToShow}
           />
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
+        )}
+          
+          {!isSearchingMode && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          )}
         </>
       </section>
 
