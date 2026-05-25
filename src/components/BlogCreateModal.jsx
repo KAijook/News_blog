@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-hot-toast";
+import useDebounce from "../hooks/useDebounce";
 import {
   Dialog,
   DialogContent,
@@ -159,7 +160,7 @@ export default function BlogCreateModal({ isOpen, onClose, onBlogCreated }) {
           <div className="mb-[20px]">
             <label
               htmlFor="tags"
-              className="block mb-[8px] font-semibold text-[#111827] text-[0.95rem]"
+              className="block mb-[8px] font-[400] text-[#111827] text-[0.95rem]"
             >
               Tags
             </label>
@@ -175,12 +176,12 @@ export default function BlogCreateModal({ isOpen, onClose, onBlogCreated }) {
                   disabled={isPending}
                   portal={false}
                 >
-                  <ComboboxChips className="w-full min-h-[42px] p-[6px_12px] border border-slate-900/10 rounded-[8px] transition-[border-color,box-shadow] duration-200 focus-within:border-[#667eea] focus-within:shadow-[0_0_0_3px_rgba(102,126,234,0.1)] disabled:bg-[#f9fafb] disabled:text-[#9ca3af]">
+                  <ComboboxChips className="w-full bg-[#fff] min-h-[42px] p-[6px_12px] border border-slate-900/10 rounded-[8px] transition-[border-color,box-shadow] duration-200 focus-within:border-[#667eea] focus-within:shadow-[0_0_0_3px_rgba(102,126,234,0.1)] disabled:bg-[#f9fafb] disabled:text-[#9ca3af]">
                     <ComboboxValue>
                       {field.value.map((item) => (
                         <ComboboxChip
                           key={item}
-                          className="bg-[#667eea] text-white px-[10px] py-[4px] rounded-[6px] text-[0.875rem] flex items-center gap-[6px] m-[2px]"
+                          className="bg-[#667eea] text-[#fff] px-[10px]  rounded-[6px] text-[0.875rem] flex items-center gap-[6px] m-[2px]"
                         >
                           {item}
                         </ComboboxChip>
@@ -192,7 +193,7 @@ export default function BlogCreateModal({ isOpen, onClose, onBlogCreated }) {
                           ? "Type to add or select tags..."
                           : "Add more tags..."
                       }
-                      className="flex-1 outline-none bg-transparent text-[1rem] min-w-[120px]"
+                      className="min-w-[120px] flex-1 border-0 bg-transparent px-0 py-0 text-[1rem] outline-none placeholder:text-[#9ca3af] placeholder:opacity-100 placeholder:text-[1rem] focus:outline-none"
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
                           e.preventDefault();
@@ -205,7 +206,7 @@ export default function BlogCreateModal({ isOpen, onClose, onBlogCreated }) {
                       }}
                     />
                   </ComboboxChips>
-                  <ComboboxContent className="max-h-[200px] overflow-y-auto border border-slate-900/10 rounded-[8px] bg-white shadow-lg mt-[4px] z-50">
+                  <ComboboxContent className="max-h-[200px] overflow-y-auto border border-slate-900/10 rounded-[8px] bg-[#fff] shadow-lg mt-[4px] z-50">
                     <ComboboxEmpty className="p-[12px] text-center text-[#6b7280] text-[0.9rem]">
                       No tags found
                     </ComboboxEmpty>
@@ -263,7 +264,7 @@ export default function BlogCreateModal({ isOpen, onClose, onBlogCreated }) {
             <button
               type="submit"
               disabled={isPending}
-              className="border-none rounded-[8px] p-[10px_16px] font-semibold cursor-pointer transition-all duration-200 text-[0.95rem] bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white hover:not(:disabled):-translate-y-[2px] hover:not(:disabled):shadow-[0_10px_22px_rgba(102,126,234,0.3)] disabled:opacity-60 disabled:cursor-not-allowed"
+              className="border-none rounded-[8px] p-[10px_16px] font-semibold cursor-pointer transition-all duration-200 text-[0.95rem] bg-linear-to-br from-[#667eea] to-[#764ba2] text-[#fff] hover:not(:disabled):-translate-y-[2px] hover:not(:disabled):shadow-[0_10px_22px_rgba(102,126,234,0.3)] disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {isPending ? "Creating..." : "Create Blog"}
             </button>

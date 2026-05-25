@@ -155,7 +155,7 @@ export default function BlogDescription({ blog, onBlogUpdated }) {
 
       {deleteConfirm && (
         <Dialog open={deleteConfirm} onOpenChange={setDeleteConfirm}>
-          <DialogContent className="max-w-[400px] p-[24px] max-h-[300px]">
+          <DialogContent className="max-w-[400px] p-[24px] max-h-[330px]">
             <DialogHeader>
               <DialogTitle className="mb-[2px]">Delete Blog</DialogTitle>
             </DialogHeader>

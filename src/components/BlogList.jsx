@@ -21,9 +21,9 @@ export default function BlogList({
       className="flex flex-col rounded-[24px] p-[22px] min-h-[350px] bg-white/90 border-slate-900/[0.08] shadow-[0_16px_34px_rgba(15,23,42,0.08)] animate-pulse"
     >
       <div className="flex-1">
-        <Skeleton className="h-6 w-[80px] rounded-full " />
-        <Skeleton className="h-7 w-full mt-[14px] mb-[10px]" />
-        <Skeleton className="h-3/4 w-full mt-[14px] mb-[10px]" />
+     <Skeleton className="h-1/10 w-3/4 mt-[10px] mb-[10px]" />
+        <Skeleton className="h-1/10 w-9/10 mt-[10px] mb-[10px]" />
+        <Skeleton className="h-4/6 w-full mt-[14px] mb-[10px]" />
       </div>
     </Card>
   );
@@ -73,7 +73,7 @@ export default function BlogList({
                   Post #{blog.id}
                 </p>
                 <button
-                  className="rounded-full py-[0.6rem] px-[0.6rem] bg-linear-to-br from-[#667eea] to-[#764ba2] text-white font-[500] cursor-pointer transition-all duration-200 hover:opacity-90 active:scale-95"
+                  className="rounded-full py-[0.6rem] px-[0.6rem] bg-linear-to-br from-[#667eea] to-[#764ba2] text-[#fff] font-[500] cursor-pointer transition-all duration-200 hover:opacity-90 active:scale-95"
                   onClick={() => {
                     if (onItemClick) {
                       onItemClick(blog.id);

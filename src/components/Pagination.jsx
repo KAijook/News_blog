@@ -39,7 +39,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
   return (
     <div className="mt-[40px] flex flex-wrap items-center justify-center gap-[8px]">
       <button
-        className="cursor-pointer flex h-[40px] min-w-[40px] items-center justify-center rounded-[8px] border border-[rgba(102,126,234,0.2)] bg-[rgba(255,255,255,0.8)] px-[12px] font-[400] text-[1.2rem] text-[#1f2937] transition-all duration-200 hover:not(:disabled):-translate-y-[2px] hover:not(:disabled):border-[rgba(102,126,234,0.4)] hover:not(:disabled):bg-[#fff] disabled:cursor-not-allowed disabled:opacity-50"
+        className="cursor-pointer flex h-[40px] flex-col min-w-[40px]  rounded-[8px] border border-[rgba(102,126,234,0.2)] bg-[rgba(255,255,255,0.8)] px-[12px] font-[400] text-[1.2rem] text-[#1f2937] transition-all duration-200 hover:not(:disabled):-translate-y-[2px] hover:not(:disabled):border-[rgba(102,126,234,0.4)] hover:not(:disabled):bg-[#fff] disabled:cursor-not-allowed disabled:opacity-50"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
@@ -64,7 +64,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
       ))}
 
       <button
-        className=" cursor-pointer flex h-[40px] min-w-[40px] items-center justify-center rounded-[8px] border border-[rgba(102,126,234,0.2)] bg-[rgba(255,255,255,0.8)] px-[12px] font-[400] text-[1.2rem] text-[#1f2937] transition-all duration-200 hover:not(:disabled):-translate-y-[2px] hover:not(:disabled):border-[rgba(102,126,234,0.4)] hover:not(:disabled):bg-[#fff] disabled:cursor-not-allowed disabled:opacity-50"
+        className=" cursor-pointer  flex h-[40px] min-w-[40px] flex-col  rounded-[8px] border border-[rgba(102,126,234,0.2)] bg-[rgba(255,255,255,0.8)] px-[12px] font-[400] text-[1.2rem] text-[#1f2937] transition-all duration-200 hover:not(:disabled):-translate-y-[2px] hover:not(:disabled):border-[rgba(102,126,234,0.4)] hover:not(:disabled):bg-[#fff] disabled:cursor-not-allowed disabled:opacity-50"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
