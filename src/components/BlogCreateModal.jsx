@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { blogAPI } from "../api";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +14,6 @@ import {
 import z from "zod";
 import {
   Combobox,
-  ComboboxInput,
   ComboboxContent,
   ComboboxList,
   ComboboxItem,
@@ -59,24 +57,22 @@ export default function BlogCreateModal({ isOpen, onClose, onBlogCreated }) {
       body: "",
     },
   });
-
+  const queryClient = useQueryClient();
   //get tags for suggestions
   const { data: tagsData } = useQuery({
     queryKey: ["tags"],
     queryFn: () => blogAPI.getTagList().then((res) => res.data),
   });
 
-  const navigate = useNavigate();
-
   // Mutation for creating a new blog post
   const { mutate: createBlog, isPending } = useMutation({
     mutationFn: (blogData) => blogAPI.createPost(blogData),
     onSuccess: (data) => {
       toast.success("Blog created successfully!");
-      onBlogCreated(data);
-      setTimeout(() => {
-        onClose();
-      }, 1500);
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      onBlogCreated?.(data);
+      reset();
+      onClose();
     },
     onError: (err) => {
       console.error("Failed to create blog:", err);
@@ -99,7 +95,6 @@ export default function BlogCreateModal({ isOpen, onClose, onBlogCreated }) {
     };
 
     createBlog(payload);
-    navigate("/blog");
   };
 
   if (!isOpen) return null;

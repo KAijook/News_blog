@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-export default function BlogDescription({ blog }) {
+export default function BlogDescription({ blog, onBlogUpdated }) {
   const navigate = useNavigate();
   const [showEditModal, setShowEditModal] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
@@ -39,9 +39,9 @@ export default function BlogDescription({ blog }) {
     mutationFn: (updatedData) => blogAPI.updatePost(blog.id, updatedData),
     onSuccess: () => {
       setShowEditModal(false);
-      queryClient.invalidateQueries({ queryKey: ["blog", blog.id] });
       toast.success("Blog updated successfully");
-     
+      queryClient.invalidateQueries({ queryKey: ["blog", blog.id] });
+      onBlogUpdated?.();
     },
     onError: (err) => {
       console.error("Failed to update blog:", err);
@@ -53,8 +53,8 @@ export default function BlogDescription({ blog }) {
     mutationFn: () => blogAPI.deletePost(blog.id),
     onSuccess: () => {
       setDeleteConfirm(false);
-      queryClient.invalidateQueries({ queryKey: ["blog", blog.id] });
       toast.success("Blog deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["blog", blog.id] });
       navigate("/");
     },
     onError: (err) => {

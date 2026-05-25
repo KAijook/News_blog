@@ -7,11 +7,12 @@ import { toast } from "react-hot-toast";
 export default function BlogSingle() {
   const { id } = useParams();
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["blog", id],
     queryFn: () => blogAPI.getPostById(id).then((res) => res.data),
     enabled: !!id,
   });
+  
   if (!data) {
     return <p>Blog not found</p>;
   }
@@ -24,7 +25,7 @@ export default function BlogSingle() {
   }
   return (
     <section className="blog-single">
-      <BlogDescription blog={data} />
+      <BlogDescription blog={data} onBlogUpdated={refetch} />
     </section>
   );
 }
