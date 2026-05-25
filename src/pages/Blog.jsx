@@ -28,7 +28,7 @@ export default function Blog() {
   const { data: tagsData } = useQuery({
     queryKey: ["tags"],
     queryFn: () =>
-      blogAPI.getTagList().then((res) => ["Everything", ...res.data]),
+      blogAPI.getTagList().then((res) => (res.data)),
   });
 
   const debouncedSearchQuery = useDebounce(searchQuery, 1000);
@@ -42,8 +42,8 @@ export default function Blog() {
 
   const isSearchingMode = debouncedSearchQuery.trim().length > 0;
 
-  const tags = tagsData || [];
-  const displayCategories = showAllTags ? tags : tags.slice(0, 8);
+const tags = tagsData ? ["Everything", ...tagsData] : ["Everything"];
+  const displayCategories = showAllTags ? tags : tags.slice(0, 9);
 
  
 
@@ -110,12 +110,17 @@ export default function Blog() {
 
     // 1. If no tag selected -> return all search results
     if (activeCategory === "Everything") {
-      return searchPostsData;
+      return searchPostsData || [];
     }
     // 2. if tag selected -> return search results filtered by tag
 
-    return searchPostsData.filter((post) => post.tags.includes(activeCategory));
+    return (searchPostsData || []).filter((post) =>
+      post.tags.includes(activeCategory),
+    );
   }, [searchPostsData, searchQuery, displayedBlogs, activeCategory]);
+
+  const showEmptySearchState =
+    searchQuery.trim().length > 0 && !isLoadingToShow && postToShow.length === 0;
 
 
 
@@ -142,7 +147,7 @@ export default function Blog() {
 
       <section className="mt-7 mb-[30px] mx-0">
         <div className="flex flex-col gap-[16px]">
-          <div className="flex flex-wrap gap-[12px] mb-[30px] mt-[28px] mx-0">
+          <div className="flex  flex-wrap gap-[12px] mb-[30px] mt-[28px] mx-0">
             {displayCategories.map((category) => (
               <button
                 key={`${category}`}
@@ -223,17 +228,17 @@ export default function Blog() {
 
       <section>
         <>
-{postToShow.length === 0 ? (
-  <p className="text-center text-gray-500 text-[1.1rem] mt-[40px]">
-    No blogs found for the selected category.
-  </p>
-) : (
+          {showEmptySearchState ? (
+            <p className="mt-[40px] text-center text-[1.1rem] text-gray-500">
+              No blogs found for the selected category.
+            </p>
+          ) : (
           <BlogList
             filteredBlogs={postToShow}
             type="blog"
             isLoading={isLoadingToShow}
           />
-        )}
+          )}
           
           {!isSearchingMode && (
             <Pagination
